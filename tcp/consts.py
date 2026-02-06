@@ -1,0 +1,3 @@
+SERVER_PORT = 8080
+SERVER_IP = 'localhost'
+BUF_SIZE = 1024
